@@ -15,15 +15,17 @@ export class MemberDetailComponent implements OnInit {
   constructor(private userService: UserService, private altertify: AlertifyService, private route: ActivatedRoute) { }
 
   ngOnInit() {
-    this.loadUser();
-  }
-  //members/
-  loadUser() {
-    this.userService.getUser(+this.route.snapshot.params['id']).subscribe((user: User) => {
-      this.user = user;
-    }, error => {
-      this.altertify.error(error);
+    this.route.data.subscribe(data => {
+      this.user = data['user'];
     });
   }
+  // //members/4
+  // // loaduser() {
+  // //   this.userservice.getuser(this.route.snapshot.params.id).subscribe((user: user) => {
+  // //     this.user = user;
+  // //   }, error => {
+  // //     this.altertify.error(error);
+  // //   });
+  // // }
 
 }
