@@ -66,29 +66,33 @@ namespace DatingApp.API
             {
                 app.UseDeveloperExceptionPage();
             }
-            else
+            else 
             {
                 app.UseExceptionHandler(builder => {
                     builder.Run(async context => {
                         context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
-
                         var error = context.Features.Get<IExceptionHandlerFeature>();
-                        if (error != null)
-                        {
+ 
+                        if(error != null) {
                             context.Response.AddApplicationError(error.Error.Message);
                             await context.Response.WriteAsync(error.Error.Message);
                         }
                     });
                 });
             }
-
-            // app.UseHttpsRedirection();
-            app.UseCors(x => x.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
+ 
+            //app.UseHttpsRedirection();
+ 
             app.UseRouting();
-
+ 
+            // To send api-json to frontend
+            // not a security risk, since credentials not allowed
+            app.UseCors(x => x.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod());
+ 
+            // For authentication
             app.UseAuthentication();
             app.UseAuthorization();
-
+ 
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
